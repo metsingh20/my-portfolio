@@ -1,0 +1,62 @@
+#define BLYNK_TEMPLATE_ID "TMPL22qGan6Mn"
+#define BLYNK_TEMPLATE_NAME "Smart house"
+#define BLYNK_AUTH_TOKEN "iRU2PZo3l9xSiwka7P_MlQYxPNY68KJ1"
+
+#define BLYNK_PRINT Serial
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include <BlynkSimpleEsp32.h>
+
+const int Relay_1 = 4;
+const int Relay_2 = 5;
+
+bool one=0;
+bool two=0;
+
+// Enter your Auth token
+char auth[] = "iRU2PZo3l9xSiwka7P_MlQYxPNY68KJ1";
+
+//Enter your WIFI SSID and password
+char ssid[] = "Electronics";
+char pass[] = "Electro8729";
+
+
+BLYNK_WRITE(V4){
+one = param.asInt();
+ if(one ==0)
+ {
+  digitalWrite(Relay_1,HIGH);
+  Serial.println("LED on");
+ }
+ else{
+  digitalWrite(Relay_1,LOW);
+    Serial.println("LED OFF");
+ }
+}
+BLYNK_WRITE(V5){
+ two = param.asInt();
+ if(two ==0)
+ {
+  digitalWrite(Relay_2,HIGH);
+  Serial.println("outlet on");
+ }
+ else{
+  digitalWrite(Relay_2,LOW);
+    Serial.println("outlet OFF");
+ }
+}
+
+void setup() {
+  // put your setup code here, to run once:
+ pinMode(Relay_1,OUTPUT);
+ pinMode(Relay_2,OUTPUT);
+
+
+  Serial.begin(115200);
+  Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+Blynk.run();
+}

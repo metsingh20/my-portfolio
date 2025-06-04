@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects - Elias Metsing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cyberpunk Animated Background */
+        .moving-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, #1a0a2e 0%, #16213e 35%, #0f3460 100%);
+        }
+
+        .neon-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        .tech-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 15s infinite linear;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .neon-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, #ff00ff, transparent);
+            opacity: 0.6;
+            animation: slideAcross 12s infinite linear;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .hologram-circuit {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            opacity: 0.4;
+            animation: drift 30s infinite linear;
+            background: rgba(0, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .hologram-circuit::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, #00ffff, transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.6;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* Header/Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 5px 30px rgba(0, 255, 255, 0.2);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-decoration: none;
+            text-shadow: 0 0 20px #00ffff;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            text-shadow: 0 0 30px #00ffff, 0 0 40px #ff00ff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: #00ffff;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        /* Futuristic Back Button */
+        .back-btn {
+            position: fixed;
+            top: 50%;
+            left: 2rem;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-50%) scale(1.15) rotate(360deg);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.8), 0 0 70px rgba(255, 0, 255, 0.6);
+        }
+
+        .back-btn svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Epic Page Transition */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a, #1a0a2e, #16213e);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(-100%);
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .page-transition.active {
+            transform: translateX(0);
+        }
+
+        .page-transition.exit {
+            transform: translateX(100%);
+        }
+
+        .transition-content {
+            text-align: center;
+            color: #00ffff;
+        }
+
+        .transition-spinner {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(0, 255, 255, 0.3);
+            border-top: 4px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 2rem;
+            box-shadow: 0 0 30px #00ffff;
+        }
+
+        .transition-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px #00ffff;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 10rem 0 6rem;
+            background: transparent;
+            min-height: 100vh;
+        }
+
+        .projects-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .section-header h1 {
+            font-size: 4.5rem;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #00ffff, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 50px rgba(0, 255, 255, 0.5);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-header p {
+            font-size: 1.4rem;
+            color: #cccccc;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .project-card {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 25px;
+            padding: 3rem;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            transition: all 0.5s ease;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 1s ease-out forwards;
+            backdrop-filter: blur(15px);
+        }
+
+        .project-card:nth-child(1) { animation-delay: 0.2s; }
+        .project-card:nth-child(2) { animation-delay: 0.4s; }
+        .project-card:nth-child(3) { animation-delay: 0.6s; }
+        .project-card:nth-child(4) { animation-delay: 0.8s; }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-20px) scale(1.03);
+            box-shadow: 0 30px 80px rgba(0, 255, 255, 0.3);
+            border-color: #00ffff;
+        }
+
+        .project-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.05));
+            border: 2px solid rgba(0, 255, 255, 0.5);
+        }
+
+        .project-image {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .project-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 3rem;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+        }
+
+        .project-card:hover .project-icon {
+            transform: rotate(15deg) scale(1.2);
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.8);
+        }
+
+        .project-content h3 {
+            font-size: 1.8rem;
+            color: #00ffff;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 15px #00ffff;
+        }
+
+        .project-content p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 2rem 0;
+        }
+
+        .tech-tag {
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 255, 0.4);
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tech-tag:hover {
+            background: #00ffff;
+            color: #000;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 255, 255, 0.4);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .project-link {
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .project-link.primary {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .project-link.primary:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.7);
+        }
+
+        .project-link.secondary {
+            background: rgba(255, 0, 255, 0.2);
+            color: #ff00ff;
+            border: 2px solid rgba(255, 0, 255, 0.4);
+        }
+
+        .project-link.secondary:hover {
+            background: #ff00ff;
+            color: #000;
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 0, 255, 0.7);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(-100vw);
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100vw);
+            }
+        }
+
+        @keyframes slideAcross {
+            0% {
+                transform: translateX(-100vw);
+                width: 0;
+            }
+            50% {
+                width: 400px;
+            }
+            100% {
+                transform: translateX(100vw);
+                width: 0;
+            }
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translate(0, 100vh) rotate(0deg);
+            }
+            100% {
+                transform: translate(100vw, -100vh) rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 20px #00ffff; }
+            100% { text-shadow: 0 0 30px #00ffff, 0 0 40px #ff00ff; }
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .back-btn {
+                left: 1rem;
+                width: 60px;
+                height: 60px;
+            }
+
+            .section-header h1 {
+                font-size: 3rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .project-card.featured {
+                grid-column: span 1;
+            }
+
+            .projects-container {
+                padding: 0 1rem;
+            }
+
+            .project-links {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cyberpunk Animated Background -->
+    <div class="moving-bg">
+        <div class="neon-grid"></div>
+        <!-- Background elements will be generated by JavaScript -->
+    </div>
+
+    <!-- Epic Page Transition -->
+    <div class="page-transition">
+        <div class="transition-content">
+            <div class="transition-spinner"></div>
+            <div class="transition-text">Loading Projects</div>
+        </div>
+    </div>
+
+    <!-- Futuristic Back Button -->
+    <button class="back-btn" onclick="goHome()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+    </button>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Elias Metsing</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html" class="active">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Projects Section -->
+    <section class="projects">
+        <div class="projects-container">
+            <div class="section-header">
+                <h1>My Projects</h1>
+                <p>Explore my journey through innovative engineering solutions, from IoT automation to smart systems integration. Each project represents a step forward in bridging hardware and software technologies in the digital age.</p>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Smart Outdoor Plant Watering System -->
+                <div class="project-card featured">
+                    <div class="project-image">
+                        <div class="project-icon">🌱</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Smart Outdoor Plant Watering System</h3>
+                        <p>As part of a collaborative team initiative, we led the development of an innovative
+                          web-based Smart Outdoor Plant Watering System. Our collective expertise in
+                         programming languages like Python and C++, alongside the implementation of Flask
+                         as a communication bridge and SQL for data storage, resulted in a sophisticated
+                         system. Together, we orchestrated the integration of sensors to remotely monitor
+                         crucial parameters such as soil moisture, humidity, and temperature across multiple
+                         plant zones. This system, hosted on a cloud platform, offered real-time data
+                         visualization and user control, empowering seamless management of plant irrigation.
+                         Our team also engineered an alert mechanism, combining SMS notifications and
+                         dashboard alerts, ensuring swift user awareness of system status and adjustments
+                         needed. This collaborative effort showcased our prowess in web development using
+                         HTML and CSS, IoT-driven solutions, and data analysis, revolutionizing plant irrigation
+                         management for optimal resource utilization and efficiency.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">Flask</span>
+                            <span class="tech-tag">SQL</span>
+                            <span class="tech-tag">IoT</span>
+                            <span class="tech-tag">Cloud Hosting</span>
+                            <span class="tech-tag">Sensors</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="SMART multioutdoor watering system.zip" class="project-link primary" download>
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14,2 14,8 20,8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10,9 9,9 8,9"/>
+                                </svg>
+                                View Project
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Smart House Wiring System -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-icon">🏠</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Smart House Wiring System</h3>
+                        <p>A comprehensive home automation system featuring motion-activated lighting and remote-controlled power outlets. 
+                             Integrates sensors,
+                             relays, and microcontrollers to create intelligent control logic for enhanced energy efficiency and convenience.
+                            .</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Embedded C</span>
+                            <span class="tech-tag">Microcontrollers</span>
+                            <span class="tech-tag">Sensors</span>
+                            <span class="tech-tag">Relay Logic</span>
+                            <span class="tech-tag">Home Automation</span>
+                            <span class="tech-tag">Electrical Systems</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="smart.txt" class="project-link primary" download>
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                                View Code
+                            </a>
+                            <a href="smart.jfif" class="project-link secondary" target="_blank">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21,15 16,10 5,21"/>
+                                </svg>
+                                View Picture
+                            </a>
+                        </div>
+                    </div>
+                </div>
+<!-- Automated Lunchbox Queue System -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-icon">📋</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Automated Lunchbox Queue System</h3>
+                        <p>An innovative queue management system that automates lunchbox distribution using ultrasonic sensors and 
+                            microcontrollers. Features real-time position tracking, LCD display, and web interface for efficient food 
+                            service management. 
+                          <p> The robotic arm I created plays a critical role in the Automated Lunchbox Queue Management and Heating System 
+                            by physically interacting with the microwave to set the heating duration. Once a lunchbox reaches the front of
+                             the queue, the system sends a signal to the robotic arm, which then moves into position and inputs the required
+                              time on the microwave keypad effectively “punching in” the minutes needed to heat the food. This process is
+                               synchronized with the microcontroller, which calculates and communicates the heating duration based on 
+                               predefined settings. The arm's movements are precisely programmed using servo motors to ensure accurate 
+                               and consistent button presses. This level of automation eliminates manual input, reduces waiting time, 
+                               and integrates seamlessly with the rest of the system, which manages queue positioning through IR sensors 
+                               and provides user feedback via an LCD display. Overall, the robotic arm serves as the physical bridge
+                                between the digital control system and the microwave heating unit.</p> 
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">ESP32</span>
+                            <span class="tech-tag">C++</span>
+                            <span class="tech-tag">Ultrasonic Sensors</span>
+                            <span class="tech-tag">LCD Display</span>
+                            <span class="tech-tag">Web Interface</span>
+                            <span class="tech-tag">Embedded Systems</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="RoboticVideo.mp4" class="project-link primary" target="_blank">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polygon points="10,8 16,12 10,16 10,8"/>
+                                </svg>
+                                Play Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Industrial Control Systems -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-icon">⚡</div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Industrial Control Systems</h3>
+                        <p>Experience with PLC programming, relay logic panels, and pneumatic control systems. Implemented sequential 
+                            operations for motor control, conveyor systems, and automated industrial processes using LOGO! software and 
+                            FluidSIM.</p>
+                        <p>In the project, a control system was designed and assembled using relay logic to manage and monitor 
+                            water level and pipeline pressure, ensuring it stays below a 2 Bar threshold. Key components included 
+                            a pressure switch, capacitive proximity sensor, differential pressure (DP) transmitter, process meter, and 
+                            an industrial relay to control the pump. A 4-20 mA current loop was used to provide accurate, real-time
+                             feedback to the process meter, replacing the LCD for displaying water level and pressure. The proximity sensor
+                              acted as a high-level switch to prevent overflow, while the pressure switch ensured safety against
+                             over-pressurization. The DP transmitter continuously measured water levels, allowing the process
+                             meter to display consistent and reliable data.
+
+                          During operation, the system automatically controlled the pump based on input from the sensors. As water entered 
+                          the tank, the relay logic activated the pump until either the pressure or level reached the safety limit. At that
+                           point, the system deactivated the pump to prevent overflow or excessive pressure. Testing confirmed that the 4-20 mA
+                            current loop provided precise readings, and the sensors triggered the relay correctly. The system maintained water
+                             pressure and level within safe operating limits, demonstrating a reliable and automated control process suitable 
+                             for real-world applications.
+                            </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">PLC Programming</span>
+                            <span class="tech-tag">LOGO! Software</span>
+                            <span class="tech-tag">FluidSIM</span>
+                            <span class="tech-tag">Relay Logic</span>
+                            <span class="tech-tag">Pneumatics</span>
+                            <span class="tech-tag">Industrial Automation</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="Panel.mp4" class="project-link primary" target="_blank">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polygon points="10,8 16,12 10,16 10,8"/>
+                                </svg>
+                                Play Panel Demo
+                            </a>
+                            <a href="C:/Users/metsi/Documents/2025/Report/portfolio/pneumatics.mp4" class="project-link secondary" target="_blank">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polygon points="10,8 16,12 10,16 10,8"/>
+                                </svg>
+                                Play Pneumatics Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Page Load Animation
+        window.addEventListener('load', function() {
+            const transition = document.querySelector('.page-transition');
+            setTimeout(() => {
+                transition.classList.add('active');
+                setTimeout(() => {
+                    transition.classList.remove('active');
+                    transition.classList.add('exit');
+                    setTimeout(() => {
+                        transition.style.display = 'none';
+                    }, 1000);
+                }, 500);
+            }, 100);
+        });
+
+// Back Button Function
+        function goHome() {
+            const transition = document.querySelector('.page-transition');
+            transition.style.display = 'flex';
+            transition.classList.remove('exit');
+            transition.classList.add('active');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+
+        // Generate Dynamic Background Elements
+        function createBackgroundElements() {
+            const movingBg = document.querySelector('.moving-bg');
+            
+            // Create floating particles
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'tech-particle';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                movingBg.appendChild(particle);
+            }
+            
+            // Create neon lines
+            for (let i = 0; i < 8; i++) {
+                const line = document.createElement('div');
+                line.className = 'neon-line';
+                line.style.top = Math.random() * 100 + 'vh';
+                line.style.left = '-100px';
+                line.style.animationDelay = Math.random() * 12 + 's';
+                movingBg.appendChild(line);
+            }
+            
+            // Create hologram circuits
+            for (let i = 0; i < 5; i++) {
+                const circuit = document.createElement('div');
+                circuit.className = 'hologram-circuit';
+                circuit.style.top = Math.random() * 100 + 'vh';
+                circuit.style.left = '-120px';
+                circuit.style.animationDelay = Math.random() * 30 + 's';
+                movingBg.appendChild(circuit);
+            }
+        }
+
+        // Initialize background elements
+        createBackgroundElements();
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills - Elias Metsing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* Animated Tech Background */
+        .moving-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .tech-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #007acc, #00a8ff);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 20s infinite linear;
+        }
+
+        .tech-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #007acc, transparent);
+            opacity: 0.3;
+            animation: slideAcross 15s infinite linear;
+        }
+
+        .circuit-pattern {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            opacity: 0.1;
+            animation: drift 25s infinite linear;
+        }
+
+        .circuit-pattern::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 15px;
+            height: 15px;
+            background: #007acc;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.3;
+        }
+
+        /* Header/Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 122, 204, 0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007acc;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: #007acc;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #007acc;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(0, 122, 204, 0.05), rgba(0, 153, 255, 0.05));
+            margin-bottom: 4rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="circuit" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M10,1 L10,6 M10,14 L10,19 M1,10 L6,10 M14,10 L19,10" stroke="%23007acc" stroke-width="0.5" fill="none" opacity="0.3"/><circle cx="10" cy="10" r="2" fill="%23007acc" opacity="0.2"/></pattern></defs><rect width="100" height="100" fill="url(%23circuit)"/></svg>') repeat;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #007acc, #0099ff, #333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        /* Skills Categories */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 122, 204, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out both;
+        }
+
+        .skill-category:nth-child(1) { animation-delay: 0.3s; }
+        .skill-category:nth-child(2) { animation-delay: 0.4s; }
+        .skill-category:nth-child(3) { animation-delay: 0.5s; }
+        .skill-category:nth-child(4) { animation-delay: 0.6s; }
+
+        .skill-category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 122, 204, 0.15);
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #007acc, #0099ff);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #007acc, #0099ff);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Individual Skills */
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .skill-level {
+            font-size: 0.9rem;
+            color: #007acc;
+            font-weight: bold;
+        }
+
+        .skill-bar {
+            height: 8px;
+            background: #e0e6ed;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(135deg, #007acc, #0099ff);
+            border-radius: 10px;
+            width: 0;
+            transition: width 2s ease-out;
+            position: relative;
+        }
+
+        .skill-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        /* Certifications Section */
+        .certifications {
+            background: linear-gradient(135deg, rgba(0, 122, 204, 0.05), rgba(0, 153, 255, 0.05));
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .certifications::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(0, 122, 204, 0.03) 20px,
+                rgba(0, 122, 204, 0.03) 40px
+            );
+            animation: rotate 20s linear infinite;
+        }
+
+        .certifications-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .certifications h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #333;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .cert-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid #007acc;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cert-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(0, 122, 204, 0.15);
+        }
+
+        .cert-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .cert-details {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Tools & Technologies */
+        .tools-section {
+            margin-bottom: 4rem;
+        }
+
+        .tools-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tools-header h2 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tech-tag {
+            background: linear-gradient(135deg, #007acc, #0099ff);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-tag:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 122, 204, 0.3);
+        }
+
+        .tech-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tech-tag:hover::before {
+            left: 100%;
+        }
+
+        /* Experience Highlights */
+        .experience-highlights {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .experience-highlights h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .highlight-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 122, 204, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .highlight-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .highlight-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #007acc, #0099ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(-10px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(10px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideAcross {
+            0% {
+                transform: translateX(-100vw);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skill-category {
+                padding: 1.5rem;
+            }
+
+            .certifications,
+            .experience-highlights {
+                padding: 2rem;
+            }
+
+            .cert-grid,
+            .highlight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tech-tags {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">Elias Metsing</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="#skills" class="active">Skills</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Page Header -->
+            <section class="page-header">
+                <div class="page-header-content">
+                    <h1>Technical Skills & Expertise</h1>
+                    <p>A comprehensive overview of my technical capabilities, certifications, and hands-on experience in electrical engineering and computer systems.</p>
+                </div>
+            </section>
+
+            <!-- Skills Grid -->
+            <section class="skills-grid">
+                <!-- Programming Skills -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <div class="category-icon">💻</div>
+                        <div class="category-title">Programming & Development</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Python</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>C/C++</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Embedded C</span>
+                            <span class="skill-level">Intermediate</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="80"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>SQL</span>
+                            <span class="skill-level">Intermediate</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="75"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Web & IoT Development -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <div class="category-icon">🌐</div>
+                        <div class="category-title">Web & IoT Development</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>HTML/CSS</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="88"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Flask Framework</span>
+                            <span class="skill-level">Intermediate</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="78"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Cloud Hosting</span>
+                            <span class="skill-level">Intermediate</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="72"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>IoT Systems</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="85"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hardware & Electronics -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <div class="category-icon">⚡</div>
+                        <div class="category-title">Hardware & Electronics</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Microcontrollers (AVR, ESP32)</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Circuit Design & Analysis</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>PCB Design & Prototyping</span>
+                            <span class="skill-level">Intermediate</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="75"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Sensor Integration</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="88"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Systems & Automation -->
+                <div class="skill-category">
+                    <div class="category-header">
+                        <div class="category-icon">🔧</div>
+                        <div class="category-title">Control Systems & Automation</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>PLC Programming</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="85"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Relay Logic Systems</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="90"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Motor Control Systems</span>
+                            <span class="skill-level">Advanced</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="88"></div>
+                        </div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">
+                            <span>Pneumatic Systems</span>
+                            <span class="skill-level">Intermediate</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-level="78"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tools & Technologies -->
+            <section class="tools-section">
+                <div class="tools-header">
+                    <h2>Tools & Technologies</h2>
+                    <p>Software tools, platforms, and technologies I work with regularly</p>
+                </div>
+                <div class="tech-tags">
+                    <div class="tech-tag">LTSpice</div>
+                    <div class="tech-tag">FluidSIM</div>
+                    <div class="tech-tag">LOGO! Soft Comfort</div>
+                    <div class="tech-tag">Microsoft Azure</div>
+                    <div class="tech-tag">Git & GitHub</div>
+                    <div class="tech-tag">Oscilloscope</div>
+                    <div class="tech-tag">Function Generator</div>
+                    <div class="tech-tag">Multimeter</div>
+                    <div class="tech-tag">Soldering Equipment</div>
+                    <div class="tech-tag">Circuit Prototyping</div>
+                    <div class="tech-tag">Cisco Networking</div>
+                    <div class="tech-tag">Industrial Automation</div>
+                </div>
+            </section>
+
+            <!-- Certifications -->
+            <section class="certifications">
+                <div class="certifications-content">
+                    <h2>Certifications & Training</h2>
+                    <div class="cert-grid">
+                        <div class="cert-item">
+                            <div class="cert-title">Pneumatic Systems Certification</div>
+                            <div class="cert-details">FluidSIM simulation & practical pneumatic system design and implementation</div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-title">PLC Programming Certification</div>
+                            <div class="cert-details">LOGO! Soft Comfort - Industrial logic control programming and simulation</div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-title">Industrial Motor Control</div>
+                            <div class="cert-details">Single-phase & three-phase motor control, starters, and safety systems</div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-title">Oscilloscope & Signal Generator</div>
+                            <div class="cert-details">Calibration and advanced measurement techniques for electronic testing</div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-title">Safety Procedures & OHSA Compliance</div>
+                            <div class="cert-details">Workplace safety standards and electrical safety protocols</div>
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-title">Cisco Networking Fundamentals</div>
+                            <div class="cert-details">Network configuration, protocols, and basic cybersecurity principles</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Highlights -->
+            <section class="experience-highlights">
+                <h2>Experience Highlights</h2>
+                <div class="highlight-grid">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🏭</div>
+                        <div class="highlight-title">Industrial Experience</div>
+                        <div class="highlight-desc">Hands-on experience with industrial automation systems, PLC programming, and motor control systems through Resolution Circle work-integrated learning program.</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🌱</div>
+                        <div class="highlight-title">IoT Project Development</div>
+                        <div class="highlight-desc">Designed and implemented smart irrigation system using sensors, cloud hosting, and web interfaces, demonstrating end-to-end system integration skills.</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🏠</div>
+                        <div class="highlight-title">Smart Home Systems</div>
+                        <div class="highlight-desc">Created intelligent home automation systems with motion sensors, programmable lighting, and energy-efficient control systems.</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon">🔬</div>
+                        <div class="highlight-title">Electronics Prototyping</div>
+                        <div class="highlight-desc">Extensive experience in circuit design, component testing, soldering, and electronic system troubleshooting using professional equipment.</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // Create animated background elements
+        function createMovingBackground() {
+            const movingBg = document.createElement('div');
+            movingBg.className = 'moving-bg';
+            document.body.appendChild(movingBg);
+
+            // Create
